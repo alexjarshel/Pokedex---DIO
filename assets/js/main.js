@@ -1,15 +1,27 @@
-const offset = 0;
-const limit = 10;
+const pokemonList = document.getElementById('pokemonList');
 
-const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`;
+pokeApi.getPokemons().then((pokemons = []) => {  
+    pokemonList.innerHTML += pokemons.map(convertPokemonToLi).join('')
+    
+})
 
-const list = fetch(url)
-.then((response) => response.json())
-.then((jsonBody) => jsonBody.results)
-.then((pokemonList) =>{
- console.log(pokemonList[0])})
+function convertPokemonTypesToLi(pokemonType){
+    return pokemonType.map((typeSlot) => {return `<li class='type'>${typeSlot.type.name}</li>`})}
 
-.catch((error) => console.error(error))
+function convertPokemonToLi(pokemon){
 
-console.log(list)
+    return `
+    <li class="pokemon">
+        <span class="number">#${pokemon.order}</span>
+        <span class="name">${pokemon.name}</span>
 
+        <div class="details">
+            <ol class="types">
+                ${convertPokemonTypesToLi(pokemon.types).join('')}
+            </ol>              
+            <img src="${pokemon.sprites.other.dream_world.front_default}" alt="${pokemon.name}">
+        </div>
+    </li>
+    `
+  
+}
